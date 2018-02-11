@@ -5,8 +5,8 @@
 
 common.render = (function updateModule() {
   // utility
-  const checkNodeTagEqual = (node1, node2) => {
-    if (node1 === null) return false
+  const checkNodeTypeEqual = (node1, node2) => {
+    if (node1 === null || node2 === null) return false
     if (typeof node1 !== typeof node2) return false
     if (typeof node1 === 'string' && node1 !== node2) return false
     if (node1.tag !== node2.tag) return false
@@ -24,7 +24,7 @@ common.render = (function updateModule() {
   const setProp = ($target, name, value) => {
     const event = getEvent(name)
     if (event) return $target.addEventListener(event, value)
-    if (typeof value === 'boolean') return $target.setAttribute(name, value || undefined)
+    if (typeof value === 'boolean') return $target[name] = value
     return $target.setAttribute(name, value)
   }
 
@@ -82,13 +82,18 @@ common.render = (function updateModule() {
    * @param {number} index 
    */
   const update = ($parent, oldNode, newNode, index=0) => {
+    // tags with special behaviour
+    if($parent.tagName.toLowerCase() === 'textarea') {
+      return $parent.value = newNode
+    }
+
     if (typeof oldNode === 'undefined') {
       // parent got more children
       $parent.appendChild(createElement(newNode))
     } else if (typeof newNode === 'undefined') {
       // parent got less children
       $parent.removeChild($parent.childNodes[index])
-    } else if ( ! checkNodeTagEqual(oldNode, newNode)) {
+    } else if ( ! checkNodeTypeEqual(oldNode, newNode)) {
       // child tag changed
       $parent.replaceChild(createElement(newNode), $parent.childNodes[index])
     } else if (newNode.tag) {
