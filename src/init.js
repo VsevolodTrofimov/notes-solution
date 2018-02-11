@@ -1,32 +1,33 @@
 (function init() {
-  const notes = [{
-    id: 0,
-    title: "Колок",
-    text: "Затащить на пятюню",
-    color: 'blue',
-    titleUpdate: console.log,
-  }, {
-    id:1,
-    color: 'orange',
-    title:"IMG",
-    img: "https://pp.userapi.com/c637917/v637917736/7213e/bKbdB4CLC5Q.jpg",
-    text:"OTHER TEXT LL",
-  }]
-
-  const sections = [
-    {
-      title: 'Приоритетные',
-      notes
-    },
-    {
-      title: 'Обычные',
-      notes
+  const updateApp = state => {
+    const sections = [{
+      title: 'High Priority',
+      notes : []
+    },{
+        title: 'Default',
+        notes : []
+    }, {
+      title: 'New note',
+      notes: []
+    }]
+    
+    for(let id in state.notes) {
+      const note = state.notes[id]
+      const sectionIdx = id === 'new' ? 2 : (note.priority ? 0 : 1)
+      sections[sectionIdx].notes.push({
+        id,
+        ...note
+      })
     }
-  ]
 
-  const vm = common.templates.app({
-    sections
-  })
-  
-  common.render(document.body, vm)
+    console.log('re-render', state, sections)
+
+    const vm = common.templates.app({sections})
+
+    console.log(vm)
+    common.render(document.body, vm)
+  }
+
+  common.store.subscribe(updateApp)
+  updateApp(common.store.state)
 }())
