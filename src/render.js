@@ -43,7 +43,7 @@ common.render = (function updateModule() {
 
   // nodes
   const createElement = node => {
-    if (node == null) return document.createComment(' empty vnode ') // all empty values imaginable
+    if ( ! node) return document.createComment(' empty vnode ')
     if (typeof node === 'string') return document.createTextNode(node)
 
     const $el = document.createElement(node.tag)
