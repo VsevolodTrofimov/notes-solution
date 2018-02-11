@@ -1,0 +1,39 @@
+/* Global */
+body, html {
+  margin: 0;
+  padding: 0;
+  background: #f1f1f1;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* App block */
+.app {
+  font-family: 'Roboto';
+}
+
+
+/* Section block */
+.section {
+  padding: 1rem;
+}
+
+/* Section elements */
+.section__title {
+  margin: 1rem;
+  text-align: center;
+  font-size: 32px;
+}
+
+.section__row {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.section__note {
+  margin: 1rem;
+}

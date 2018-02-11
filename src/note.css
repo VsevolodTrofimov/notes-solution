@@ -1,0 +1,115 @@
+/* Note block */
+.note {
+  display: flex;
+  flex-direction: column;
+
+  min-height: 18rem;
+  width: 18rem;
+
+  overflow: hidden;
+
+  background: #ffffff;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .32);
+  border-radius: 0.25rem;
+}
+
+/* Note elements */
+.note__image {
+  display: block;
+  margin: 0.25rem;
+  border-radius: 0.125rem;
+  height: 30%;
+  background-size: cover;
+  background-position: center;
+}
+
+.note__title, .note__text {
+  display: block;
+  width: 100%;
+  padding: .5rem;
+  background: transparent;
+  border: 0;
+  resize: none;
+}
+
+.note__title {
+  /* font-size * line-height + paddingVertical * 2 */
+  height: calc(1.2em + 1rem);
+  font-family: inherit;
+  font-size: 1.5rem;
+  line-height: 1.2;
+}
+
+.note__text {
+  flex: 1;
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+.note__title:focus, .note__text:focus {
+  outline: none;
+}
+
+/* Note-actions elements */
+.note__actions {
+  display: flex;
+  margin: 0.25rem;
+  overflow: hidden;
+  border-radius: 0.125rem;
+  text-align: right;
+}
+
+.note__actions__action {
+  flex: 1;
+  position: relative;
+  padding: 10px;
+  border: 0;
+  text-transform: uppercase;
+  font-weight: 500;
+  font-size: 0.6875rem;
+  background: rgba(255, 255, 255, .75);
+}
+
+.note__actions__action:not(:last-child):after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translate(0%, -50%); /* anchor to center */
+
+  display: block;
+  height: 50%;
+  width: 0.0625rem;
+  
+  background: rgba(0, 0, 0, .25);
+  z-index: 2;
+}
+
+.note__actions__action:focus, .note__actions__action:hover {
+  outline: 0;
+  text-decoration: underline;
+}
+
+.note__actions__action:active {
+  background: rgba(225, 225, 225, .75);
+}
+
+/* Note modifiers */
+.note--color-yellow {
+  background: rgb(253, 255, 141);
+}
+.note--color-orange {
+  background: rgb(251, 208, 125);
+}
+.note--color-red {
+  background: rgb(253, 137, 128);
+}
+.note--color-blue {
+  background: rgb(128, 216, 255);
+}
+
+@media (max-width: 480px) {
+  .note {
+    width: 100%;
+  }
+}
