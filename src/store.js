@@ -48,8 +48,8 @@ common.store = (function() {
       delete note_backups[noteId]
     },
     NOTE_EDIT_CANCEL: ({noteId}) => {
-      const note = state.notes[noteId]
-      Object.assign(note, note_backups[noteId])
+      state.notes[noteId] = note_backups[noteId]
+      state.notes[noteId].state = 'default'
       delete note_backups[noteId]
     },
     NOTE_TITLE_SET: ({noteId, value}) => {
@@ -57,6 +57,10 @@ common.store = (function() {
     },
     NOTE_TEXT_SET: ({noteId, value}) => {
       state.notes[noteId].text = value
+    },
+    NOTE_IMAGE_PROMPT: ({noteId}) => {
+      const note = state.notes[noteId]
+      note.img = prompt('Image URL', note.img)
     },
 
     NOTE_COLOR_NEXT: ({noteId}) => {
