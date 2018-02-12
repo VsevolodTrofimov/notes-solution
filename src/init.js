@@ -6,25 +6,31 @@
     },{
         title: 'Default',
         notes : []
-    }, {
-      title: 'New note',
-      notes: []
     }]
     
+    let noteNew
+
     for(let id in state.notes) {
       const note = state.notes[id]
-      const sectionIdx = id === 'new' ? 2 : (note.priority ? 0 : 1)
-      sections[sectionIdx].notes.push({
+
+      if(id === 'new') {
+        noteNew = {id, ...note}
+        continue
+      }
+
+      sections[(note.priority ? 0 : 1)].notes.push({
         id,
         ...note
       })
     }
 
-    console.log('re-render', state, sections)
+    sections[1].notes.push(noteNew)
 
     const vm = common.templates.app({sections})
-
+    
+    console.log('re-render', state, sections)
     console.log(vm)
+
     common.render(document.body, vm)
   }
 

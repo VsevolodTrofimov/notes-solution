@@ -105,7 +105,10 @@ common.templates = (function templatesModule() {
       return note
     })
 
-    const row = h('div', {class: 'section__row'}, notes)
+    const row = h(
+      'div', {class: 'section__row'}, 
+      notes.length ? notes : ['No notes']
+    )
 
     return h(
       'section', {class: 'section'}, [
@@ -115,9 +118,7 @@ common.templates = (function templatesModule() {
   }
 
   const app = props => {
-    const sections = props.sections.map(s => {
-      return s.notes.length ? common.templates.section(s) : null
-    })
+    const sections = props.sections.map(common.templates.section)
     return h('div', {class: 'app'}, sections)
   }
 
