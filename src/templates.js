@@ -59,6 +59,8 @@ common.templates = (function templatesModule() {
       class: 'note__title',
       disabled: state === 'default',
       placeholder: 'Title',
+      // onMount isn't real dom event
+      onMount: event => common.utils.autoResizeTextarea(event.target),
       onInput: event => {
         common.store.dispatch({
           type: 'NOTE_TITLE_SET',

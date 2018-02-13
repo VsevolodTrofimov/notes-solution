@@ -49,6 +49,12 @@ common.render = (function updateModule() {
     const $el = document.createElement(node.tag)
     setProps($el, node.props)
 
+    // cb in setTimeout(cb, 0) fires after stack is cleared
+    setTimeout(() => {
+      const event = new Event('mount')
+      $el.dispatchEvent(event)
+    }, 0)
+
     node.children
       .map(createElement)
       .forEach($child => $el.appendChild($child))
