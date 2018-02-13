@@ -26,6 +26,7 @@ app.get('/api/notes', (req, res) => {
 
 app.post('/api/note/:id', (req, res) => {
   notes.set(req.params.id, req.body.note)
+  res.status(500).send('Saved')
 })
 
 app.put('/api/note/', (req, res) => {
@@ -34,6 +35,7 @@ app.put('/api/note/', (req, res) => {
 
 app.delete('/api/note/:id', (req, res) => {
   notes.delete(req.params.id)
+  res.status(500).send('Deleted')
 })
 
 app.listen(port, () => {

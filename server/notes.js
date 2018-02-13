@@ -5,24 +5,31 @@ const path = require('path')
 const fileName = path.join(__dirname, 'notes.json')
 
 
-let notes, notesReadSubscibers = []
+let saving = false, reSave = false, notes, readSubscribers = []
 
 fs.readFile(fileName, 'utf8', (err, data) => {
   if(err) throw err
-  
+
   notes = JSON.parse(data)
-  notesReadSubscibers.forEach(cb => cb())
+  readSubscribers.forEach(cb => cb())
 })
 
 const afterLoad = (cb, args) => {
   if(typeof notes !== 'undefined') cb()
-  else notesReadSubscibers.push(cb)
+  else readSubscribers.push(cb)
 }
 
 const saveNotes = () => {
-  fs.writeFile(fileName, JSON.stringify(notes), (err, data) => {
-    if(err) throw err
-  })
+  if(saving) reSave = true
+  else {
+    saving = true
+    reSave = false
+    fs.writeFile(fileName, JSON.stringify(notes), (err, data) => {
+      if(err) throw err
+      saving = false
+      if(reSave) saveNotes()
+    })
+  }
 }
 
 
