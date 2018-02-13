@@ -1,4 +1,4 @@
-common.store = (function() {
+common.store = (function storeModule() {
   const prossibleColors = ['blue', 'red', 'orange', 'yellow']
   const note_backups = {}
   const subscribers = []
@@ -10,31 +10,59 @@ common.store = (function() {
     state: 'new'
   })
 
+  const extractNoteData = note => ({
+    title: note.title,
+    text: note.text,
+    img: note.img,
+    color: note.color,
+    priority: note.priority,
+  })
+
   const state = {
     notes: {
-      '0': {
-        title: "Колок",
-        text: "Затащить на пятюню",
-        color: 'blue',
-        priority: true,
-      }, 
-      '1': {
-        color: 'orange',
-        title:"IMG",
-        img: "https://pp.userapi.com/c637917/v637917736/7213e/bKbdB4CLC5Q.jpg",
-        text:"OTHER TEXT LL",
-      },
       'new': newNote()
     }
   }
 
-
   const reactions = {
+    NOTES_UPDATE_ALL: ({notes}) => {
+      const allNotes = Object.assign({}, state.notes, notes)
+
+      for(let id in allNotes) {
+        if((state.notes[id] && state.notes[id].state === 'edit')
+        || (id === 'new')) {
+          // don't mess againt user's actions
+          continue
+        }
+
+        if(notes[id]) {
+          if( ! state.notes[id]) state.notes[id] = {}
+          Object.assign(state.notes[id], notes[id])
+        } else {
+          delete state.notes[id]
+        }
+      }
+    },
+
+    NOTE_SET_ID: ({oldId, newId}) => {
+        state.notes[newId] = state.notes[oldId]
+        delete state.notes[oldId]
+    },
+
     NOTE_ADD: () => {
       const nextTmpId = 'tmp-' + String(Object.keys(state.notes).length - 2)
       state.notes[nextTmpId] = state.notes['new']
       state.notes[nextTmpId].state = 'default'
       state.notes.new = newNote()
+
+      const note = state.notes[nextTmpId]
+
+      common.net.request('/api/note', 'PUT', {note: extractNoteData(note)})
+        .then(id => common.store.dispatch({
+          type: 'NOTE_SET_ID',
+          oldId: nextTmpId,
+          newId: id
+        }))
     },
 
     NOTE_EDIT: ({noteId}) => {
@@ -45,6 +73,10 @@ common.store = (function() {
     NOTE_EDIT_SAVE: ({noteId}) => {
       const note = state.notes[noteId]
       note.state = 'default'
+
+      common.net.request(`/api/note/${noteId}`, 'POST',
+                         {note: extractNoteData(note)})
+
       delete note_backups[noteId]
     },
     NOTE_EDIT_CANCEL: ({noteId}) => {
@@ -70,10 +102,15 @@ common.store = (function() {
     },
     NOTE_PRIORITY_TOGGLE: ({noteId}) => {
       state.notes[noteId].priority = !state.notes[noteId].priority
+
+      common.net.request(`/api/note/${noteId}`, 'POST',
+                         {note: extractNoteData(state.notes[noteId])})
     },
 
     NOTE_DELETE: ({noteId}) => {
       delete state.notes[noteId]
+
+      common.net.request(`/api/note/${noteId}`, 'DELETE')
     }
   }
 
@@ -95,7 +132,6 @@ common.store = (function() {
   }
 
   const dispatch = action => {
-    console.log(action)
     react(action)
   }
 
