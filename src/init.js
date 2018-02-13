@@ -27,13 +27,14 @@
     sections[1].notes.push(noteNew)
 
     const vm = common.templates.app({sections})
-    
-    console.log('re-render', state, sections)
-    console.log(vm)
-
     common.render(document.body, vm)
   }
 
   common.store.subscribe(updateApp)
-  updateApp(common.store.state)
+  common.net.sync.start('/api/notes', notes => {
+    common.store.dispatch({
+      type: 'NOTES_UPDATE_ALL',
+      notes
+    })
+  }, 5000)
 }())
