@@ -3,14 +3,14 @@ const path = require('path')
 const express = require('express')
 const bodyParser = require('body-parser')
 
-const notes = require('./notes')
+const NoteService = require('./notes')
 
 
 const app = express()
 const port = 8080
 const root = path.resolve(__dirname, '../')
 const staticPath = path.resolve(root, './src')
-
+const notes = NoteService(path.join(__dirname, 'notes.json'))
 
 app.use(bodyParser.json())
 app.use('/src', express.static(staticPath))
@@ -26,7 +26,7 @@ app.get('/api/notes', (req, res) => {
 
 app.post('/api/note/:id', (req, res) => {
   notes.set(req.params.id, req.body.note)
-  res.status(500).send('Saved')
+  res.status(200).send('Saved')
 })
 
 app.put('/api/note/', (req, res) => {
@@ -35,7 +35,7 @@ app.put('/api/note/', (req, res) => {
 
 app.delete('/api/note/:id', (req, res) => {
   notes.delete(req.params.id)
-  res.status(500).send('Deleted')
+  res.status(200).send('Deleted')
 })
 
 app.listen(port, () => {
