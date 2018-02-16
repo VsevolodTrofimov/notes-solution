@@ -3,7 +3,7 @@
  * @typedef {(string|{tag: string, props: Object, children: [VNode]})} VNode
  */
 
-common.render = (function updateModule() {
+common.render = (function renderModule() {
   // utility
   const checkNodeTypeEqual = (node1, node2) => {
     if (node1 === null || node2 === null) return false
