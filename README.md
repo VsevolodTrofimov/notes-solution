@@ -35,10 +35,10 @@ common.render = (function renderModule()
  */
 
 /**
-   * Updates DOM bssed on VDOM's diff
-   * @param {HTMLElement} $root element to mount app into
-   * @param {VNode} vNode virtual DOM to render effectively
-   */
+ * Updates DOM bssed on VDOM's diff
+ * @param {HTMLElement} $root element to mount app into
+ * @param {VNode} vNode virtual DOM to render effectively
+ */
 ```
 
 [JS DOC](http://usejsdoc.org/index.html) -- договоренность по документированию в JS. 
