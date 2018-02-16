@@ -19,6 +19,7 @@ FLUX + vDOM (позволяет обновлять весь View не очень
 `server/notes.js` это называется сервис. Выделенный кусок бекэенда, при большой нагрузке 
 его можно выделить в отдельный процесс \ продублировать.
 
+---
 
 ```js
 common.render = (function renderModule() 
@@ -27,6 +28,7 @@ common.render = (function renderModule()
 ```
 Так называемый IIFE (Immediately Invoked Function Expression) Это позволяет получить инкапсуляцию с помощью областей видимости в JS
 
+---
 
 ```js
 /**
@@ -34,11 +36,16 @@ common.render = (function renderModule()
  * @typedef {(string|{tag: string, props: Object, children: [VNode]})} VNode
  */
 
+
+
 /**
  * Updates DOM bssed on VDOM's diff
  * @param {HTMLElement} $root element to mount app into
  * @param {VNode} vNode virtual DOM to render effectively
  */
+const render = ($root, vNode) => {
+  // ...
+}
 ```
 
 [JS DOC](http://usejsdoc.org/index.html) -- договоренность по документированию в JS. 
